@@ -9,10 +9,18 @@ GEMINI_KEY = os.getenv("gemini_key")
 
 client = genai.Client(api_key=GEMINI_KEY)
 
+global history
+history = []
+
 
 def ask_llm(page_text):
     prompt = f"""
-You are a web browsing agent. You see the following content on a webpage:
+You are a smart web browsing agent. You can browse and interact with websites using actions like 'click', 'fill', 'goto' or 'stop'.
+Don't repeat actions you've already taken. Use memory to decide the next step based on prior interactions.
+
+--- MEMORY (past actions you took) --- {"None" if not history else chr(10).join(history[-3:])}
+
+You see the following content on a webpage:
 
 --- PAGE CONTENT START ---
 
@@ -22,6 +30,7 @@ You are a web browsing agent. You see the following content on a webpage:
 
 What should you do next? Consider tasks that would normally (and logically) be done by a human, such as searching for something when you see a search bar, clicking on buttons to navigate and perform tasks, etc.
 If you see HTML that indicates a search bar or input field (such as classes named search, input, query, etc.) then think of a random topic that you can search for return that topic in the "VALUE" field specified below.
+When you have returned a VALUE to be filled, look for a button that should be clicked to actually enter that input and go to the next page - and then return that target button along with a "click" action, as specified in the output format below.
 
 Respond in this format:
 ACTION: <click/fill/goto/stop>
@@ -30,7 +39,7 @@ VALUE: <Text to type if filling (such as search bars or other inputs), else leav
 """
 
     res = client.models.generate_content(
-        model="gemini-2.5-flash-preview-04-17",
+        model="gemini-2.0-flash",
         contents=prompt,
     )
 
@@ -47,6 +56,8 @@ def parse_response(response):
             target = line.split(":", 1)[1].strip()
         elif line.startswith("VALUE:"):
             value = line.split(":", 1)[1].strip()
+
+    history.append(f"ACTION: {action} | TARGET: {target} | VALUE: {value}")
     return action, target, value
 
 
