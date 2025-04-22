@@ -37,7 +37,7 @@ You see the following content on a webpage:
 
 What should you do next? Consider tasks that would normally (and logically) be done by a human, such as searching for something when you see a search bar, clicking on buttons to navigate and perform tasks, etc.
 If you see HTML that indicates a search bar or input field (such as classes/elements containing the words search, input, query, form etc. They are also inside divs or form elements sometimes so look for it properly) then think of a random topic that you can search for return that topic in the "VALUE" field specified below.
-If you have returned a VALUE to be filled in the last action that you took, look for a button that should be clicked to actually enter that input and go to the next page - and then return that target button along with a "click" action, as specified in the output format below.
+If you have returned a VALUE to be filled in the last action that you took, look for a button that should be clicked to actually enter that input and go to the next page - and then return that target button along with a "click" action, as specified in the output format below. Specifically look for <button> elements with names/placeholders/aria labels as "Search", "Ask" or other related words in such cases.
 If you see a "Accept Cookies" button click on it and then proceed further.
 If the same action repeats more than 2 times, consider stopping or changing strategy.
 
