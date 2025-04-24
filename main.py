@@ -121,4 +121,4 @@ def run_agent(start_url):
 
 
 if __name__ == "__main__":
-    run_agent("https://stackoverflow.com/questions")
+    run_agent("https://wikipedia.org")
